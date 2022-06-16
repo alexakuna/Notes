@@ -1,9 +1,27 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import HomeView from '../views/HomeView.vue';
+import NoteView from '../views/NoteView.vue';
 
 Vue.use(VueRouter);
 
-const routes = [];
+const routes = [
+  {
+    path: '/',
+    name: 'HomeView',
+    component: HomeView,
+  },
+  {
+    path: '/edit',
+    name: 'NoteView',
+    component: NoteView,
+    props: true,
+  },
+  {
+    path: '*',
+    component: HomeView,
+  },
+];
 
 const router = new VueRouter({
   mode: 'history',
