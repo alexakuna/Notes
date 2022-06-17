@@ -55,7 +55,11 @@ export default {
   data: () => ({
     showDialog: false,
     indexForRemoveNote: null,
-    emptyNote: { id: '', title: '', tasks: [] },
+    emptyNote: {
+      id: '',
+      title: '',
+      tasks: [],
+    },
   }),
   components: {
     TaskComponent,
