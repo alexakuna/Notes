@@ -2,16 +2,23 @@
 <div class="task">
   <div class="desc-block">
     <label>
-      <input type="checkbox" :checked="status" @change="status = !status">
+      <input type="checkbox" :checked="status" @change="changeStatus">
     </label>
     <div class="description">
       <div v-if="status" class="done-block"></div>
-      {{ title }}
+<!--      <span>{{ title }}</span>-->
+      <input
+        ref="input"
+        type="text"
+        placeholder="Enter task"
+        :disabled="status"
+        v-model="title"
+      >
     </div>
   </div>
   <div class="actions-block">
-    <button class="edit" :disabled="status">&#128393;</button>
-    <button class="remove" :disabled="status">&#128465;</button>
+<!--    <button class="edit" :disabled="status">&#128393;</button>-->
+    <button @click="deleteTask" class="remove">&#128465;</button>
   </div>
 </div>
 </template>
@@ -27,6 +34,23 @@ export default {
   created() {
     this.status = this.task.status;
     this.title = this.task.title;
+  },
+  methods: {
+    deleteTask() {
+      this.$emit('removeTask');
+    },
+    changeStatus() {
+      this.$emit('status');
+      this.status = !this.status;
+    },
+  },
+  mounted() {
+    this.$refs.input.focus();
+  },
+  watch: {
+    title(newValue) {
+      this.$emit('title', newValue);
+    },
   },
 };
 </script>
@@ -60,6 +84,12 @@ export default {
     .description {
       position: relative;
       word-break: break-all;
+      input {
+        border: none;
+        outline: none;
+        padding: 10px;
+        background-color: transparent;
+      }
     }
   }
 }

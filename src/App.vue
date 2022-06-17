@@ -75,6 +75,9 @@ body {
   justify-content: space-between;
   align-items: center;
   border-top: 1px solid black;
+  &:last-child {
+    border-bottom: 1px solid black;
+  }
   .note {
     .note-title {
       font-size: 24px;
@@ -83,9 +86,59 @@ body {
     }
   }
 }
+.title-input {
+  border: none;
+  outline: none;
+  font-size: 24px;
+  width: 100%;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+.modal {
+  .dialog {
+    color: black;
+    background: whitesmoke;
+    padding: 30px;
+    border-radius: 5px;
+    .dialog-actions {
+      display: flex;
+      justify-content: end;
+      button {
+        color: #323233;
+        font-weight: 700;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        transition: all 0.2s ease-out;
+        &:first-child {
+          background-color: lightgreen;
+          margin-right: 5px;
+        }
+        &:last-child {
+          background-color: lightgray;
+        }
+        &:first-child {
+          &:hover {
+            background-color: darkgreen;
+            color: white;
+          }
+        }
+        &:last-child {
+          &:hover {
+            background-color: darkgrey;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}
 @media (min-width: 320px) and (max-width: 425px) {
   #app {
     width: 90%;
+    .dialog {
+      width: 218px;
+    }
     h1 {
       font-size: 20px;
     }

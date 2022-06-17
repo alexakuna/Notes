@@ -1,9 +1,18 @@
 <template>
   <div class="home">
+    <ModalComponent v-if="showDialog">
+      <div class="dialog">
+        <h3>Do you want to delete the note?</h3>
+        <div class="dialog-actions">
+          <button @click="removeNote(indexForRemoveNote)">Yes</button>
+          <button @click="showDialog = false">Cancel</button>
+        </div>
+      </div>
+    </ModalComponent>
     <div class="head">
       <h1>Notes</h1>
       <router-link
-        :to="{name: 'NoteView', params: { note: emptyNote }}"
+        :to="{name: 'NoteView', params: { note: emptyNote, forEdit: false }}"
         custom
         v-slot="{ navigate }"
       >
@@ -26,13 +35,13 @@
         </div>
         <div class="action-note">
           <router-link
-            :to="{name: 'NoteView', params: { note: note }}"
+            :to="{name: 'NoteView', params: { note: note, forEdit: true }}"
             custom
             v-slot="{ navigate }"
           >
             <button class="edit" @click="navigate" role="link">&#128393;</button>
           </router-link>
-          <button class="remove" @click="removeNote(index)">&#128465;</button>
+          <button class="remove" @click="defineShowDialog(index)">&#128465;</button>
         </div>
       </div>
     </template>
@@ -40,6 +49,8 @@
 </template>
 
 <script>
+import ModalComponent from '@/components/ModalComponent.vue';
+
 export default {
   name: 'HomeView',
   data: () => ({
@@ -48,32 +59,42 @@ export default {
       title: '',
       tasks: [],
     },
-    notes: [
-      {
-        id: 1,
-        title: 'learn Java Script',
-        tasks: [
-          { title: 'Types of data', status: false, id: 1 },
-          { title: 'Classes', status: false, id: 2 },
-          { title: 'Hoisting', status: true, id: 3 },
-        ],
-      },
-      {
-        id: 2,
-        title: 'learn CSS',
-        tasks: [
-          { title: 'Flex BOX', status: false, id: 1 },
-          { title: 'Pseudo classes', status: false, id: 2 },
-          { title: 'Margin, padding', status: true, id: 3 },
-          { title: 'Grids', status: false, id: 4 },
-          { title: 'Positions', status: true, id: 5 },
-        ],
-      },
-    ],
+    notes: [],
+    showDialog: false,
+    indexForRemoveNote: null,
   }),
+  components: {
+    ModalComponent,
+  },
+  created() {
+    const notes = localStorage.getItem('notes');
+    if (notes !== null) {
+      this.notes = JSON.parse(notes);
+    }
+    const note = localStorage.getItem('note');
+    if (note !== null) {
+      const parsedNote = JSON.parse(note);
+      this.notes.forEach((i, index) => {
+        if (parsedNote.id === i.id) {
+          this.notes.splice(index, 1, parsedNote);
+        }
+      });
+      if (!this.notes.some((i) => parsedNote.id === i.id)) {
+        this.notes.push(parsedNote);
+      }
+      localStorage.removeItem('note');
+      localStorage.setItem('notes', JSON.stringify(this.notes));
+    }
+  },
   methods: {
+    defineShowDialog(index) {
+      this.indexForRemoveNote = index;
+      this.showDialog = true;
+    },
     removeNote(index) {
       this.notes.splice(index, 1);
+      this.showDialog = false;
+      localStorage.setItem('notes', JSON.stringify(this.notes));
     },
   },
 };

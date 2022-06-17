@@ -12,7 +12,7 @@ const routes = [
     component: HomeView,
   },
   {
-    path: '/edit',
+    path: '/note',
     name: 'NoteView',
     component: NoteView,
     props: true,
