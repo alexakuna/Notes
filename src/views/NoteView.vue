@@ -22,7 +22,7 @@
       <router-link to="/">&#8678; Back</router-link>
       <div style="display: flex; align-items: center">
         <button
-          v-if="emptyNote.tasks.length"
+          v-if="isShowBtn"
           style="border-radius: 3px"
           class="edit" @click="saveNote"
         >Save</button>
@@ -36,7 +36,8 @@
     <template v-else>
       <TaskComponent
         v-for="(task, index) in emptyNote.tasks"
-        :task="task" :key="task.id"
+        :task="task"
+        :key="task.id"
         @removeTask="defineShowDialog(index)"
         @status="changeStatus(index)"
         @title="changeTitle($event, index)"
@@ -53,13 +54,17 @@ export default {
   name: 'NoteView',
   props: ['note', 'forEdit'],
   data: () => ({
+    showSaveBtn: false,
     showDialog: false,
     indexForRemoveNote: null,
-    emptyNote: {
+    emptyNote: { // <- To change name
       id: '',
       title: '',
       tasks: [],
     },
+    isShowBtnFromTitle: false,
+    isShowBtnFromTaskTitle: false,
+    isShowBtnFromTasksLength: false,
   }),
   components: {
     TaskComponent,
@@ -67,8 +72,14 @@ export default {
   },
   created() {
     if (this.note) {
-      this.emptyNote = this.note;
+      this.emptyNote = JSON.parse(JSON.stringify(this.note));
     }
+  },
+  computed: {
+    isShowBtn() {
+      return this.showSaveBtn || this.isShowBtnFromTitle
+        || this.isShowBtnFromTaskTitle || this.isShowBtnFromTasksLength;
+    },
   },
   methods: {
     addTask() {
@@ -86,12 +97,16 @@ export default {
       this.emptyNote.tasks.forEach((task, idx) => {
         if (index === idx) {
           this.emptyNote.tasks.splice(index, 1, { ...task, status: !task.status });
+          this.showSaveBtn = this.note.tasks
+            .some((i, y) => i.status !== this.emptyNote.tasks[y].status);
         }
       });
     },
     changeTitle(newTitle, index) {
       const task = this.emptyNote.tasks.find((i, idx) => index === idx);
       this.emptyNote.tasks.splice(index, 1, { ...task, title: newTitle });
+      this.isShowBtnFromTaskTitle = this.note.tasks
+        .some((i, y) => i.title !== this.emptyNote.tasks[y].title);
     },
     saveNote() {
       localStorage.setItem(
@@ -105,6 +120,18 @@ export default {
   },
   mounted() {
     if (!this.emptyNote.tasks.length) this.$refs['title-input'].focus();
+  },
+  watch: {
+    // eslint-disable-next-line
+    'emptyNote.title'(newValue, oldValue) {
+      if (oldValue === '') return;
+      this.isShowBtnFromTitle = this.note.title !== newValue;
+    },
+    // eslint-disable-next-line
+    'emptyNote.tasks.length'() {
+      this.isShowBtnFromTasksLength = this.emptyNote.tasks.length > this.note.tasks.length
+        || this.emptyNote.tasks.length < this.note.tasks.length;
+    },
   },
 };
 </script>

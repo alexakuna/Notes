@@ -39,8 +39,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px;
     .add {
       cursor: pointer;
       font-size: 2rem;
@@ -69,12 +68,14 @@ body {
 }
 .tasks {
   flex-direction: column;
+  padding-inline-start: 20px;
 }
 .notes {
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-top: 1px solid black;
+  padding: 0 10px;
   &:last-child {
     border-bottom: 1px solid black;
   }
@@ -93,6 +94,7 @@ body {
   width: 100%;
   margin-top: 30px;
   margin-bottom: 15px;
+  padding: 0 10px;
 }
 .modal {
   .dialog {
@@ -139,8 +141,13 @@ body {
     .dialog {
       width: 218px;
     }
+    .title-input {
+      margin-top: 20px;
+      margin-bottom: 0;
+    }
     h1 {
-      font-size: 20px;
+      margin-top: 5px;
+      margin-bottom: 5px;
     }
   }
 

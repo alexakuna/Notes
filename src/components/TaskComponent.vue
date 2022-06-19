@@ -6,7 +6,6 @@
     </label>
     <div class="description">
       <div v-if="status" class="done-block"></div>
-<!--      <span>{{ title }}</span>-->
       <input
         ref="input"
         type="text"
