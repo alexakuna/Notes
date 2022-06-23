@@ -2,21 +2,26 @@
 <div class="task">
   <div class="desc-block">
     <label>
-      <input type="checkbox" :checked="status" @change="changeStatus">
+      <input
+        type="checkbox"
+        :disabled="!isTitle"
+        :checked="task.status"
+        @change="changeStatus"
+      >
     </label>
     <div class="description">
-      <div v-if="status" class="done-block"></div>
       <input
+        class="task-input"
         ref="input"
         type="text"
-        placeholder="Enter task"
-        :disabled="status"
+        placeholder="Enter task*"
+        :disabled="task.status"
         v-model="title"
+        :class="{done: task.status}"
       >
     </div>
   </div>
   <div class="actions-block">
-<!--    <button class="edit" :disabled="status">&#128393;</button>-->
     <button @click="deleteTask" class="remove">&#128465;</button>
   </div>
 </div>
@@ -27,11 +32,15 @@ export default {
   name: 'TaskComponent',
   props: ['task'],
   data: () => ({
-    status: null,
     title: null,
   }),
+  computed: {
+    // Если название задачи не указано не можем изменить статус.
+    isTitle() {
+      return !!this.task.title;
+    },
+  },
   created() {
-    this.status = this.task.status;
     this.title = this.task.title;
   },
   methods: {
@@ -40,7 +49,6 @@ export default {
     },
     changeStatus() {
       this.$emit('status');
-      this.status = !this.status;
     },
   },
   mounted() {
@@ -72,6 +80,7 @@ export default {
     border-bottom: solid 1px #d0c4c4;
   }
   .desc-block {
+    width: 90%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -81,13 +90,17 @@ export default {
       margin-right: 5px;
     }
     .description {
+      width: 100%;
       position: relative;
       word-break: break-all;
       input {
+        width: 100%;
         border: none;
         outline: none;
         padding: 10px;
         background-color: transparent;
+        caret-color: cornflowerblue;
+        color: #777377;
       }
     }
   }

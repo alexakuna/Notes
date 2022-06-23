@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
+    "lodash.isequal": "^4.5.0",
     "vue": "^2.6.14",
     "vue-router": "^3.5.1"
   },
@@ -41,11 +42,18 @@
       "parser": "@babel/eslint-parser"
     },
     "rules": {
-      "vuejs-accessibility/label-has-for": ["error", {
-        "required": {
-          "some": ["nesting", "id"]
+      "vuejs-accessibility/label-has-for": [
+        "error",
+        {
+          "required": {
+            "some": [
+              "nesting",
+              "id"
+            ]
+          }
         }
-      }]
+      ],
+      "object-shorthand": 0
     }
   },
   "browserslist": [
