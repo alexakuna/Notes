@@ -1,12 +1,5 @@
-# panda-team-test
+# Notes
 ```
-Test task for Front-end developer (Vue js) for the Panda-team company.
-```
-
-# Some comments
-```
-Validation for the number of characters and other points did not. It wasn't in the specification.
-And sorryan for ugly button :)))
 ```
 
 ## Project setup
